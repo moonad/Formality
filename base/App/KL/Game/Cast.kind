@@ -1,7 +1,7 @@
 type App.KL.Game.Cast {
   new(
     player: String
-    target: Hexagonal.Axial
+    target: List<Hexagonal.Axial>
     letter: Char
   )
 }

@@ -1,10 +1,11 @@
 type App.KL.Game.Skill {
 	new(
-  	name: String                     // the name of the skill
-    delay: U64                       // skills with larger delay are called later
-    frames: U64                      // how many ticks its animation takes
-    range: U64                       // cast range
-		effect: App.KL.Game.Effect<Unit> // its in-game effect
+  	name: String                        // the name of the skill
+    delay: U64                          // skills with larger delay are called later
+    frames: U64                         // how many ticks its animation takes
+    range: U64                          // cast range
+    pattern: App.KL.Game.Skill.Pattern  // pattern in which skill is cast
+		effect: App.KL.Game.Effect<Unit>    // its in-game effect
     description: String
 	)
 }
@@ -23,3 +24,9 @@ App.KL.Game.Skill.get(
     get skill = hero@skills{Char.to_string(letter)}
     return skill
   }
+
+type App.KL.Game.Skill.Pattern {
+  single
+  vector
+  multiple(areas: Nat)
+}

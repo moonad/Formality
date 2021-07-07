@@ -141,24 +141,26 @@ App.KL.Game.Hero.Kenlua.hero: App.KL.Game.Hero
       idle:
         {none, idle_spr}
       cast:
+        let target = List.head!(pose.target) <> pose.center
+        let center = pose.center
         switch String.eql(pose.skill@name) {
           "Walk": 
             let coord = switch U64.lte(pose.frame) {
-              3: pose.center // 3
-            } default pose.target
+              3: center // 3
+            } default target
             {some(coord), walk_ani[U64.to_nat(pose.frame)] <> idle_spr}
           "Dash": 
             let coord = switch U64.lte(pose.frame) {
-              10: pose.center
-            } default pose.target
+              10: center
+            } default target
             {some(coord), dash_ani[U64.to_nat(pose.frame)] <> idle_spr}
           "Stare":
             {none, stare_spri}
           "Slash":
             let coord = switch U64.lte(pose.frame) {
-              22: pose.center
-              59: pose.target
-            } default pose.center
+              22: center
+              59: target
+            } default center
             {some(coord), slash_ani[U64.to_nat(pose.frame)] <> idle_spr}
         } default {none, idle_spr}
     }
