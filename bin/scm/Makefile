@@ -6,7 +6,7 @@ clean:
 	rm src/*.so
 	rm bin/*
 bin/kind-scm:
-	cd src/ && scheme compile.scm
+	cd src/ && scheme -q compile.scm
 	chmod +x bin/kind-scm
 kind-scm.deb: bin/kind-scm
 	mkdir -p kind-scm_1.0.1-0_amd64/usr/local/bin/

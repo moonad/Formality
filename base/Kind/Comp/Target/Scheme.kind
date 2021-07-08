@@ -322,7 +322,8 @@ Kind.Comp.Target.Scheme.exports: Kind.Comp.Exports
   "kstring_join"]
 
 Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
-`; string-view record type (fast way to get a tail)
+`; string functions
+; string-view record type (fast way to get a tail)
 (define-record string-view
   ((immutable data)  ; underlying string
    (immutable start) ; start position (inclusive)
@@ -383,8 +384,9 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
     ""
     (kstring-append
       (if fst "" sep)
-      (car strs)
-      (kstring_join sep (cdr strs) #f))))
+      (kstring-append
+        (car strs)
+        (kstring_join sep (cdr strs) #f)))))
 
 ; Short alias to vector-ref
 (define get vector-ref)
