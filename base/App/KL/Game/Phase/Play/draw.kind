@@ -196,7 +196,8 @@ App.KL.Game.Phase.Play.Draw.get_indicators(
 ): App.KL.Game.Indicators
 
   Maybe {
-    get skill_key  = preview@skill
+    get pair       = preview@skill
+    let skill_key  = pair@fst
     get skill      = App.KL.Game.Skill.get(user, skill_key, game)
     let targets    = App.KL.Game.Picks.get_skill_coords(skill_key, preview@picks)
     let targets    = target & targets
@@ -381,7 +382,8 @@ App.KL.Game.Phase.Play.draw.skill_description(local: App.KL.Game.State.Local, ga
   open local 
   open game
   Maybe {
-    get skill_key = local.preview@skill
+    get pair      = local.preview@skill
+    let skill_key = pair@fst
     get skill     = App.KL.Game.Skill.get(local@user, skill_key, game)
     return 
       <div style=main_style>

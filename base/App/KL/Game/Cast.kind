@@ -8,7 +8,7 @@ type App.KL.Game.Cast {
 
 type App.KL.Game.Cast.Preview {
   new(
-    skill: Maybe<Char>
+    skill: Maybe<Pair<Char, Nat>>
     picks: App.KL.Game.Picks
   )
 }

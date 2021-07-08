@@ -23,12 +23,12 @@ App.KL.Game.Phase.Play.when(
         let preview       =
           case preview@skill as skill {
             none: 
-              preview@skill <- some(event.code)
+              preview@skill <- some({event.code, 1})
             some:
-              if skill.value =? event.code then
+              if skill.value@fst =? event.code then
                 preview@skill <- none
               else 
-                preview@skill <- some(event.code)
+                preview@skill <- some({event.code, 1})
           }          
         return local@preview <- preview
       } <> local))
@@ -42,10 +42,22 @@ App.KL.Game.Phase.Play.when(
             some:
               IO {
                 // log("Key up " | Char.to_string(skill.value))
+                let {char, count} = skill.value
                 let coord = Hexagonal.Axial.from_screen_xy(local@mouse, App.KL.Constants.hexagon_radius, App.KL.Constants.center_x, App.KL.Constants.center_y)
-                let preview = preview@skill <- none
-                App.new_post!(local@room, App.KL.Game.Phase.Play.Event.cast.serial(skill.value, coord))
-                App.set_local!(App.KL.State.Local.game(local@preview <- preview))
+                let skill = App.KL.Game.Skill.get(local@user, char, game)
+                case skill {
+                  none: App.pass!
+                  some:
+                    let pattern = App.KL.Game.Skill.get_pattern(skill.value)
+                    let new_skill_preview =
+                      if count <? pattern then
+                        some({char, count + 1})
+                      else
+                        none
+                    let preview = preview@skill <- new_skill_preview
+                    App.new_post!(local@room, App.KL.Game.Phase.Play.Event.cast.serial(char, coord))
+                    //App.set_local!(App.KL.State.Local.game(local@preview <- preview))
+                }
               }
           }
         execution:

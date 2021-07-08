@@ -3,7 +3,7 @@ App.KL.Game.Cast.picks_of(
   player: String
   game: App.KL.Game
 ): App.KL.Game.Picks
-  let result = {{}, Hexagonal.Axial.Map.new! } :: Pair<Map<Unit>, App.KL.Game.Picks>
+  let result = {{}, Hexagonal.Axial.Map.new! } :: Pair<Map<Nat>, App.KL.Game.Picks>
   let casts  = game@casts
 
   for cast in casts with result:
@@ -11,11 +11,30 @@ App.KL.Game.Cast.picks_of(
     let {seen, map} = result
     if player =? cast.player then
       let skill = App.KL.Game.Cast.get_skill(cast, game)
-      let letter = Char.to_string(cast.letter)
-      case skill seen{letter} {
-        some none: 
-          { seen{letter} <- unit, Hexagonal.Axial.Map.set!(cast.target, cast.letter, map) }
-      } default {seen, map}
+      case skill {
+        some:
+          let coords_max = App.KL.Game.Skill.get_pattern(skill.value)
+          let letter = Char.to_string(cast.letter)
+          case seen{letter} as seen {
+            none: 
+              let target = cast.target[0]
+              case target {
+                none: result
+                some: { seen{letter} <- 1, Hexagonal.Axial.Map.set!(target.value, cast.letter, map)}
+              }
+            some: 
+              let target = cast.target[seen.value]
+              if seen.value =? coords_max then
+                result
+              else
+                case target {
+                  none: result
+                  some: { seen{letter} <- seen.value + 1, Hexagonal.Axial.Map.set!(target.value, cast.letter, map)}
+                }
+          }
+        none: {seen, map}
+      }
+      
     else
       result
   

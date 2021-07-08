@@ -5,4 +5,12 @@ App.KL.Game.Cast.push(
   letter: Char
   casts: List<App.KL.Game.Cast>
 ): List<App.KL.Game.Cast>
-  App.KL.Game.Cast.new(player, target, letter) & casts
+  let list = []
+  for cast in casts with list:
+    let cast = 
+      if (cast@player =? player) && (cast@letter =? letter) then 
+        cast@target <- target & cast@target
+      else
+        cast 
+    cast & list
+  list
