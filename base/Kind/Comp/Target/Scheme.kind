@@ -561,6 +561,9 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
 (define (get_time)
   (time_to_string (current-time)))
 
+; Defines global socket
+(define kindsock '())
+
 ; Performs a single Kind IO action
 (define (io_action iname)
   (let ((name (kstring->string iname)))
@@ -575,6 +578,9 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
     ("get_file_mtime" (lambda (x) (get_file_mtime x)))
     ("get_time" (lambda (x) (get_time)))
     ("request" (lambda (x) ""))
+    ("init_udp" (lambda (x) (set! kindsock (create-socket socket-domain/internet socket-type/datagram socket-protocol/auto))))
+    ("send_udp" (lambda (x) (send-to-socket kindsock (hex->bytevector TODO) (make-internet-address (string->ipv4 address) port))))
+    ("recv_udp" (lambda (x) (receive-from-socket kindsock 65507))) ; TODO put port number here
     (else (display (string-append "IO action not found: " name))))))
 
 ; Runs a Kind IO program
