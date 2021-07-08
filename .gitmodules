@@ -1,0 +1,3 @@
+[submodule "bin/scm/chez-sockets"]
+	path = bin/scm/src/chez-sockets
+	url = https://github.com/rigille/chez-sockets.git
