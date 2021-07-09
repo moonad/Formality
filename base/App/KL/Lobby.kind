@@ -182,7 +182,7 @@ App.KL.Lobby.draw.front.button(id: String, content: String): DOM
     "margin-left": "10px",
     "padding": "2px"
   }
-  <button class="hover:shadow-lg" id=id style=style>
+  <button class="hover:shadow-lg w-[200px]" id=id style=style>
     content
   </button>
 
