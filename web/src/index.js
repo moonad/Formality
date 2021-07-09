@@ -1,4 +1,5 @@
-require("./assets/moonad_logo.png").default;
+import './style.css';
+// require("./assets/moonad_logo.png").default;
 
 const {Component, render} = require("inferno");
 const h = require("inferno-hyperscript").h;

@@ -182,7 +182,7 @@ App.KL.Lobby.draw.front.button(id: String, content: String): DOM
     "margin-left": "10px",
     "padding": "2px"
   }
-  <button id=id style=style>
+  <button class="hover:shadow-lg" id=id style=style>
     content
   </button>
 
@@ -207,7 +207,7 @@ App.KL.Lobby.draw.front(user: String, room_input: String, global: App.KL.Global.
     "font-size": "2rem"
   }
   <div style=style>
-    <h1 style={"margin-bottom": "10px", "text-align": "center"}>
+    <h1 class="animate-bounce" style={"margin-bottom": "10px", "text-align": "center"}>
       "Welcome to Kaelin"
     </h1>
     <div style={
