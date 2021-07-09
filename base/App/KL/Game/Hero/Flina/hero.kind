@@ -1,0 +1,38 @@
+App.KL.Game.Hero.Flina.hero: App.KL.Game.Hero
+  let name = "Flina"
+
+  let draw = (pose)
+    {none, App.KL.Game.Hero.Flina.Assets.vbox_idle}
+
+  let picture = (bool, time)
+    App.KL.Game.Hero.Flina.Assets.base64_idle
+
+  let max_hp = 10 :: I32
+
+  let max_ap = 3 :: I32
+
+  let skills = {
+    "X": App.KL.Game.Skill.new("Walk", 500, 12, 2, App.KL.Game.Skill.Pattern.single, App.KL.Game.Effect.common.walk(2, 1),
+    "Walk to another tile within 2 range from " | name |".")
+
+    "Q": App.KL.Game.Skill.new("Haste", 500, 12, 2, App.KL.Game.Skill.Pattern.single, App.KL.Game.Effect.common.walk(2, 1),
+    "Walk to another tile within 2 range from " | name |".")
+
+    "W": App.KL.Game.Skill.new("Heal", 500, 12, 2, App.KL.Game.Skill.Pattern.single, App.KL.Game.Effect.common.walk(2, 1),
+    "Walk to another tile within 2 range from " | name |".")
+
+    "E": App.KL.Game.Skill.new("Dampen", 500, 12, 2, App.KL.Game.Skill.Pattern.single, App.KL.Game.Effect.common.walk(2, 1),
+    "Walk to another tile within 2 range from " | name |".")
+
+    "R": App.KL.Game.Skill.new("Flight", 500, 32, 2, App.KL.Game.Skill.Pattern.single, App.KL.Game.Effect.common.walk(32, 3),
+    "Walk to another tile within 2 range from " | name |".")
+  }
+
+  let on_stepped = none
+
+  let description = "Flina is a resistant warrior with several different crowd control skills."
+
+  App.KL.Game.Hero.new(name, draw, picture, max_hp, max_ap, skills, on_stepped, description)
+
+
+// SKILLS

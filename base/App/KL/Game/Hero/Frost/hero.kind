@@ -61,7 +61,7 @@ App.KL.Game.Hero.Frost.Skills.summon_wall(range: I32, ap_cost: I32): App.KL.Game
       App.KL.Game.Effect.pass
     else
       let wall = App.KL.Game.Creature.new(none, App.KL.Game.Hero.Frost.hero.wall, App.KL.Game.Team.neutral, [], 0, 0)
-      App.KL.Game.Effect.board.summon(target, wall)
+      App.KL.Game.Effect.board.summon(wall, target)
   }
 
 App.KL.Game.Hero.Frost.Skills.ice_fall(area: I32, ap_cost: I32): App.KL.Game.Effect<Unit>
