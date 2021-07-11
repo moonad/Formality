@@ -18,7 +18,7 @@ App.KL.Game.Hero.Croni.hero: App.KL.Game.Hero
     "Q": App.KL.Game.Skill.new("Flux", 860, 48, 8, App.KL.Game.Skill.Pattern.single, App.KL.Game.Hero.Croni.hero.Skills.flux(12, 12, 1), 
     "Croni casts a targeted dark flux, dealing 12 damage in a single area.")
 
-    "W": App.KL.Game.Skill.new("Trap", 150, 24, 8, App.KL.Game.Skill.Pattern.multiple_no_repeat(2), App.KL.Game.Hero.Croni.hero.Skills.trap(12, 1), 
+    "W": App.KL.Game.Skill.new("Trap", 150, 24, 8, App.KL.Game.Skill.Pattern.multiple_no_repeat(2), App.KL.Game.Hero.Croni.hero.Skills.trap(8, 1), 
     "Croni summons a Trap that roots when stepped on.")
 
     "E": App.KL.Game.Skill.new("Void", 880, 24, 8, App.KL.Game.Skill.Pattern.single, App.KL.Game.Hero.Croni.hero.Skills.void(12, 1),

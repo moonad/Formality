@@ -1,0 +1,8 @@
+App.KL.Game.Effect.coord.get_vector: App.KL.Game.Effect<Pair<Hexagonal.Axial, Hexagonal.Axial>>
+  (center, targets, map)
+  direction = targets[0] <> center
+  start  = targets[1] <> direction
+  vector = {start, direction}
+
+
+  App.KL.Game.Effect.Result.new!(vector, center, map, Hexagonal.Axial.Map.new!, 0, [])
