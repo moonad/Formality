@@ -27,39 +27,11 @@ App.KL.Lobby.draw(local: App.KL.Lobby.State.Local, global: App.KL.Global.State):
   }
 
 App.KL.Lobby.draw.heroes(hero: Maybe<App.KL.Game.Hero>, skill: Maybe<App.KL.Game.Skill>, tab: String): DOM
-  let style = {
-    "width": "100%", 
-    "height": "100%", 
-    "background-image": "linear-gradient(#0e0c0e, #242324)",
-    "display": "flex", 
-    "flex-direction": "column", 
-    "justify-content": "center", 
-    "align-items": "center",
-    "font-size": "2rem"
-  }
+  let hero_list = List.map!!(App.KL.Game.Phase.Draft.draw.selection, App.KL.Game.Hero.list)
 
-  main_style = 
-  {
-    "width": "70%",
-    "height": "40%"
-    "display": "flex"
-    "justify-content": "center"
-    "align-items": "center"
-  }
-  
-  display_style = 
-  { 
-    "display": "flex",
-    "flex-wrap": "wrap",
-    "justify-content": "center", 
-    "width": "100%"
-  }
-
-  hero_list = List.map!!(App.KL.Game.Phase.Draft.draw.selection, App.KL.Game.Hero.list)
-
-  <div style=style>
-    <div style=main_style>
-      <div style=display_style>
+  <div class="w-full h-full bg-black flex flex-col justify-center items-center text-[2rem]">
+    <div class="w-8/12 h-[40%] flex justify-center items-center">
+      <div class="flex flex-wrap justify-center w-full">
         for div in hero_list: div
       </div>
     </div>
@@ -67,155 +39,62 @@ App.KL.Lobby.draw.heroes(hero: Maybe<App.KL.Game.Hero>, skill: Maybe<App.KL.Game
   </div>
 
 App.KL.Lobby.draw.heroes.hero_menu(hero: Maybe<App.KL.Game.Hero>, skill: Maybe<App.KL.Game.Skill>, tab: String): DOM
-  descriptions_style = 
-  { 
-    "width": "85%",
-    "height": "50%"
-    "margin": "4px",
-    "margin-top": "20px"
-    "display": "flex"
-    "flex-direction": "row"
-    "justify-content": "space-around"
-    "align-items": "center"
-    "border": "5px solid #d6dadc",
-    "background-color": "#Aeb4b7"
-    "border-radius": "5px"
-  }
-
-  skill_show_style = 
-  {
-    "width": "30%"
-    "height": "90%"
-    "border": "5px solid #d6dadc"
-    "background-color": "#d6dadc"
-    "border-radius": "5px"
-  }
-
   case hero {
     none:
       <div></div>
     some:
-      <div style=descriptions_style>
+      <div class="w-10/12 h-[50%] m-2 mt-4 flex justify-around items-center border-4 border-[#d6dadc] bg-[#aeb4b7] radius-md">
         {App.KL.Lobby.draw.heroes.skill(hero.value)}
         {App.KL.Lobby.draw.heroes.skill_description(skill)}
-        <div style=skill_show_style>
+        <div class="w-4/12 h-[90%] border-4 border-[#d6dadc] bg-[#d6dadc] hover:shadow-md radius-md">
         </div>
       </div>
   }
 
 App.KL.Lobby.draw.heroes.skill(hero: App.KL.Game.Hero): DOM
-  
-  skills_style = 
-  {
-    "width": "30%"
-    "height": "90%"
-    "display": "flex"
-    "flex-direction": "column"
-    "justify-position": "flex-start"
-    "align-items": "center"
-  }
-  
-  skill_buttons_style = 
-    {
-      "width": "100%"
-      "height": "90%"
-      "padding-top": "5%"
-      "display": "grid"
-      "grid-template-columns": "45% 45%"
-      "grid-gap": "10%"
-      
-    }
-
   list = []
   for key:skill in hero@skills with list:
     key & list
-  <div style=skills_style>
-    <div style={"font-size": "1em"}> "Skills"</div>
-      <div style=skill_buttons_style>
+  <div class="w-4/12 h-[90%] flex flex-col justify-start items-center">
+    <div class="text-[2rem]"> "Skills"</div>
+      <div class="w-full h-[90%] pt-2 grid grid-rows-2 grid-cols-2 gap-2">
         for key in list: App.KL.Lobby.draw.heroes.skill_button(key)
       </div>
   </div>
   
 
 App.KL.Lobby.draw.heroes.skill_button(char: String): DOM
-  
   id = "S" | char
-  skill_button_style = 
-  {
-    "width": "100%"
-    "height": "90%"
-    "border": "5px solid #d6dadc"
-    "border-radius": "5px"
-    "background-color": "#d6dadc"
-    "font-size": "2em"
-    "display":"flex"
-    "justify-content": "center"
-    "align-items": "center"
-  }
-  <div id=id style=skill_button_style>
+  <div class="w-full h-[90%] bg-[#d6dadc] hover:shadow-md rounded-md border-6 border-[#d6dadc] cursor-pointer text-[2rem] flex items-center justify-center" id=id>
     <div id=id>char</div>
   </div>
 
 App.KL.Lobby.draw.heroes.skill_description(skill: Maybe<App.KL.Game.Skill>): DOM
-  skill_description_style = 
-  {
-    "width": "30%"
-    "height": "90%"
-    "display": "flex"
-    "flex-direction": "column"
-    "justify-content": "flex-start"
-  }
+  skill_description_class = "w-4/12 h-[90%] flex flex-col justify-start"
   case skill {
-    none: <div style=skill_description_style>"no skill selected"</div>
+    none: <div class=skill_description_class>"No skill selected"</div>
     some:
-      <div style=skill_description_style>
-        <div style={"font-size": "1em"}>skill.value@name</div>
-        <div style={"font-size": "0.6em", "padding-top": "5%"}>skill.value@description</div>
+      <div class=skill_description_class >
+        <div class="text-[2rem]" >skill.value@name</div>
+        <div class="text-xl pt-5" >skill.value@description</div>
       </div>
   }
 
 
 App.KL.Lobby.draw.front.button(id: String, content: String): DOM
-  let style = {
-    "font-size": "2rem",
-    "font-family": "monospace",
-    "margin-left": "10px",
-    "padding": "2px"
-  }
-  <button class="hover:shadow-lg w-[200px]" id=id style=style>
+  <button culass="text-[2rem] font-monospace ml-3 p-1 hover:shadow-lg w-[200px]" id=id>
     content
   </button>
 
 App.KL.Lobby.draw.front.input(id: String, value: String): DOM
-  let style = {
-    "font-size": "2rem",
-    "font-family": "monospace",
-    "outline": "transparent",
-    "margin-bottom": "15px"
-  }
-  <input id=id value=value style=style>
-  </input>
+  <input id=id value=value class="text-[2rem] font-monospace mb-3"></input>
 
 App.KL.Lobby.draw.front(user: String, room_input: String, global: App.KL.Global.State): DOM
-  let style = {
-    "width": "100%", 
-    "height": "100%", 
-    "display": "flex", 
-    "flex-direction": "column", 
-    "justify-content": "center", 
-    "align-items": "center",
-    "font-size": "2rem"
-  }
-  <div style=style>
-    <h1 class="animate-bounce" style={"margin-bottom": "10px", "text-align": "center"}>
+  <div class="w-full h-full flex flex-col justify-center items-center text-[2rem]">
+    <h1 class="animate-bounce mb-4 text-center">
       "Welcome to Kaelin"
     </h1>
-    <div style={
-      "display": "flex",
-      "justify-content": "center", 
-      "flex-wrap": "wrap",
-      "text-align": "center"
-    }>
+    <div  class="flex justify-center flex-wrap text-center">
       "Enter a room number: "
       {App.KL.Lobby.draw.front.input("text", room_input)}
       <div>
