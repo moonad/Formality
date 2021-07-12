@@ -76,7 +76,7 @@ Kind.Comp.Target.Scheme.module(name: String, exports: List(String), defs: String
   for export in exports with code:
     code|" "|export
   let code = code|")\n"
-  let code = code|`(import (chezscheme))\n`
+  let code = code|`(import (chezscheme) (arcfide sockets))\n`
   let code = code|defs|")"
   code
 
@@ -562,7 +562,7 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
   (time_to_string (current-time)))
 
 ; Defines global socket
-(define kindsock '())
+(define kindsock #f)
 
 ; Performs a single Kind IO action
 (define (io_action iname)
@@ -578,7 +578,10 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
     ("get_file_mtime" (lambda (x) (get_file_mtime x)))
     ("get_time" (lambda (x) (get_time)))
     ("request" (lambda (x) ""))
-    ("init_udp" (lambda (x) (set! kindsock (create-socket socket-domain/internet socket-type/datagram socket-protocol/auto))))
+    ; TODO close socket if previous socket exists?
+    ("init_udp" (lambda (x)
+      (set! kindsock (create-socket socket-domain/internet socket-type/datagram socket-protocol/auto))
+      (bind-socket kindsock (string-append "127.0.0.1:" (number->string x)))))
     ("send_udp" (lambda (x) (send-to-socket kindsock (hex->bytevector TODO) (make-internet-address (string->ipv4 address) port))))
     ("recv_udp" (lambda (x) (receive-from-socket kindsock 65507))) ; TODO put port number here
     (else (display (string-append "IO action not found: " name))))))
@@ -666,7 +669,7 @@ Kind.Comp.Target.Scheme.cli: String
         (if (suffix? fst_arg ".kind")
           (run_io (Kind.api.io.check_file fst_arg))
           (if (suffix? fst_arg "/")
-            (run_io (Kind.api.check_files (find-all-kind-files fst_arg)))
+            (run_io (Kind.api.io.check_files (find-all-kind-files fst_arg)))
             (run_io (Kind.api.io.check_term fst_arg))))
         (let ((snd_arg (car tail_args)))
           (case snd_arg
