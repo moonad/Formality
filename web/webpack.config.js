@@ -12,7 +12,12 @@ module.exports = {
     {
       test: /\.(woff|woff2|eot|ttf|otf|ico|png)$/,
       use: ['file-loader'],
-    }
+    },
+    {
+      test: /\.css$/i,
+      include: path.resolve(__dirname, 'src'),
+      use: ['style-loader', 'css-loader', 'postcss-loader'],
+    },
   ]},
   output: {
     //filename: 'index.[contenthash].js',
@@ -29,13 +34,4 @@ module.exports = {
       template: 'src/index.html', 
     }),
   ],
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        include: path.resolve(__dirname, 'src'),
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
-      },
-    ],
-  }
 };
