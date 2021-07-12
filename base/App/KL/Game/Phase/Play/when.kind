@@ -3,7 +3,7 @@ App.KL.Game.Phase.Play.when(
   game: App.KL.Game
   event: App.Event,
 ): IO<Maybe<App.State.local<App.KL.State>>>
-
+  let room = String.take(16, Crypto.Keccak.hash(local@room))
   open game
   case event {
     frame:
@@ -48,7 +48,7 @@ App.KL.Game.Phase.Play.when(
     mouse_down: 
       case game.moment {
         preparation:
-          App.KL.Game.Phase.Play.when.preparation.skill_use(local, game)
+          App.KL.Game.Phase.Play.when.preparation.skill_use(room, local, game)
         execution:
           let preview = local@preview
           let preview = preview@skill <- none
@@ -57,7 +57,7 @@ App.KL.Game.Phase.Play.when(
   } default App.pass!
 
 
-App.KL.Game.Phase.Play.when.preparation.skill_use(local: App.KL.Game.State.Local, game: App.KL.Game): IO<Maybe<App.State.local<App.KL.State>>>
+App.KL.Game.Phase.Play.when.preparation.skill_use(room: String, local: App.KL.Game.State.Local, game: App.KL.Game): IO<Maybe<App.State.local<App.KL.State>>>
   let preview = local@preview
   case preview@skill as skill{
     none: App.pass!
@@ -94,7 +94,7 @@ App.KL.Game.Phase.Play.when.preparation.skill_use(local: App.KL.Game.State.Local
           // Updates data
           if can_cast then
             IO {
-              App.new_post!(local@room, App.KL.Game.Phase.Play.Event.cast.serial(char, coord))
+              App.new_post!(room, App.KL.Game.Phase.Play.Event.cast.serial(char, coord))
               App.set_local!(App.KL.State.Local.game(local@preview <- preview))
             }
           else
