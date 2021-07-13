@@ -81,7 +81,10 @@ Kind.Comp.Target.Scheme.module(name: String, exports: List(String), defs: String
   code
 
 Kind.Comp.Target.Scheme.program(main: String, defs: String): String
-  let code = defs|"(run_kind "|main|")"
+  let code =
+    "(import (arcfide sockets))\n"
+    |defs
+    |"(run_kind "|main|")"
   code
 
 Kind.Comp.Target.Scheme.select(term: String, cse_body_list: List<Pair<String, String>>): String
@@ -581,9 +584,9 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
     ; TODO close socket if previous socket exists?
     ("init_udp" (lambda (x)
       (set! kindsock (create-socket socket-domain/internet socket-type/datagram socket-protocol/auto))
-      (bind-socket kindsock (string-append "127.0.0.1:" (number->string x)))))
-    ("send_udp" (lambda (x) (send-to-socket kindsock (hex->bytevector TODO) (make-internet-address (string->ipv4 address) port))))
-    ("recv_udp" (lambda (x) (receive-from-socket kindsock 65507))) ; TODO put port number here
+      (bind-socket kindsock (string->internet-address (string-append "127.0.0.1:" x)))))
+    ;("send_udp" (lambda (x) (send-to-socket kindsock (hex->bytevector ) (make-internet-address (string->ipv4 address) port))))
+    ;("recv_udp" (lambda (x) (receive-from-socket kindsock 65507))) ; TODO put port number here
     (else (display (string-append "IO action not found: " name))))))
 
 ; Runs a Kind IO program
