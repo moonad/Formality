@@ -510,6 +510,14 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
           (substring str 0 split_idx)
           (substring str (+ split_idx 1) (string-length str)))))))
 
+(define (split-string chr str)
+    (let ((split_idx (first_index_of chr str 0)))
+      (if (= split_idx -1)
+        str
+        (cons
+          (substring str 0 split_idx)
+          (split-string chr (substring str (+ split_idx 1) (string-length str)))))))
+
 ; Converts a date to a string, in milliseconds
 (define (time_to_string time)
   (number->string
@@ -585,7 +593,15 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
     ("init_udp" (lambda (x)
       (set! kindsock (create-socket socket-domain/internet socket-type/datagram socket-protocol/auto))
       (bind-socket kindsock (string->internet-address (string-append "127.0.0.1:" x)))))
-    ;("send_udp" (lambda (x) (send-to-socket kindsock (hex->bytevector ) (make-internet-address (string->ipv4 address) port))))
+    ("send_udp" (lambda (x)
+      ; TODO choose port to send from
+      (let ((param_list (split-string #\; x)))
+        (let ((port (car param_list))
+              (to_ip (cadr param_list))
+              (to_port (caddr param_list))
+              (data (cadddr param_list)))
+          ; TODO convert from hex string
+          (send-to-socket kindsock (string->utf8 data) (make-internet-address (string->ipv4 to_ip) to_port))))))
     ;("recv_udp" (lambda (x) (receive-from-socket kindsock 65507))) ; TODO put port number here
     (else (display (string-append "IO action not found: " name))))))
 
