@@ -513,7 +513,7 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
 (define (split-string chr str)
     (let ((split_idx (first_index_of chr str 0)))
       (if (= split_idx -1)
-        str
+        (cons str '())
         (cons
           (substring str 0 split_idx)
           (split-string chr (substring str (+ split_idx 1) (string-length str)))))))
@@ -585,14 +585,16 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
     ("del_file" (lambda (x) (del_file x)))
     ("get_file" (lambda (x) (get_file x)))
     ("set_file" (lambda (x) (let ((file_text (split_at_first #\= (kstring->string x)))) (set_file (car file_text) (cdr file_text)))))
+    ("sleep" (lambda (x) (sleep (make-time 'time-duration (* 1000000 (string->number x)) 0))))
     ("get_dir" (lambda (x) (get_dir x)))
     ("get_file_mtime" (lambda (x) (get_file_mtime x)))
     ("get_time" (lambda (x) (get_time)))
     ("request" (lambda (x) ""))
     ; TODO close socket if previous socket exists?
     ("init_udp" (lambda (x)
-      (set! kindsock (create-socket socket-domain/internet socket-type/datagram socket-protocol/auto))
-      (bind-socket kindsock (string->internet-address (string-append "127.0.0.1:" x)))))
+      (unless kindsock
+        (set! kindsock (create-socket socket-domain/internet socket-type/datagram socket-protocol/auto))
+        (bind-socket kindsock (string->internet-address (string-append "127.0.0.1:" x))))))
     ("send_udp" (lambda (x)
       ; TODO choose port to send from
       (let ((param_list (split-string #\; x)))
@@ -601,8 +603,12 @@ Kind.Comp.Target.Scheme.basics: Kind.Comp.Basics
               (to_port (caddr param_list))
               (data (cadddr param_list)))
           ; TODO convert from hex string
-          (send-to-socket kindsock (string->utf8 data) (make-internet-address (string->ipv4 to_ip) to_port))))))
-    ;("recv_udp" (lambda (x) (receive-from-socket kindsock 65507))) ; TODO put port number here
+          (send-to-socket kindsock (string->utf8 data) (make-internet-address (string->ipv4 to_ip) (string->number to_port)))))))
+    ("recv_udp" (lambda (x)
+      (let-values (((msg address) (receive-from-socket kindsock 1500)))
+          (if msg
+            (utf8->string msg)
+            ""))))
     (else (display (string-append "IO action not found: " name))))))
 
 ; Runs a Kind IO program
